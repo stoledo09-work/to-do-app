@@ -25,7 +25,7 @@ export default {
     noteCompleted: false,
     tagInput: "",
     tagInputRules: [v => (v && v.trim()) ? true : 'Tag is required'],
-    currentNoteIndex: null,
+    currentNoteCreatedAt: null,
     deleteDialog: false,
     noteToDelete: null,
   }),
@@ -113,13 +113,13 @@ export default {
     formatDateTime(date) {
       return dayjs(date).format('MMMM D, YYYY hh:mm:ss A')
     },
-    editNote(item, index) {
+    editNote(item) {
       this.noteTitle = item.raw.title
       this.noteContent = item.raw.content
       this.noteTags = item.raw.tags
       this.noteDueDate = item.raw.dueDate ? dayjs(item.raw.dueDate).toDate() : null
       this.noteCompleted = item.raw.completed
-      this.currentNoteIndex = index
+      this.currentNoteCreatedAt = item.raw.createdAt
       this.editDialog = true
     },
     async saveNoteEdit() {
@@ -132,13 +132,19 @@ export default {
           tags: this.noteTags,
           dueDate: this.noteDueDate,
           completed: this.noteCompleted,
-          createdAt: this.notes[this.currentNoteIndex].createdAt,
+          createdAt: this.currentNoteCreatedAt,
           modifiedAt: new Date().getTime()
         }
 
-        this.notes[this.currentNoteIndex] = updatedNote
-        localStorage.setItem('notes', JSON.stringify(this.notes))
-        console.log(updatedNote)
+        const noteIndex = this.notes.findIndex(
+          (note) => note.createdAt === this.currentNoteCreatedAt
+        );
+
+        if (noteIndex !== -1) {
+          this.notes[noteIndex] = updatedNote
+          localStorage.setItem('notes', JSON.stringify(this.notes))
+          console.log(updatedNote)
+        }
 
         this.$refs.formEdit.reset()
         this.noteDueDate = null
@@ -295,7 +301,7 @@ export default {
               <template v-slot:default="{ items }">
                 <v-row>
                   <v-col v-for="(item, index) in items" :key="index" :cols="12" :sm="6" :md="4" :lg="3" :xl="2">
-                    <v-card @click="editNote(item, index)">
+                    <v-card @click="editNote(item)">
                       <v-card-title class="d-flex align-center">
                         <h4 class="text-wrap">{{ item.raw.title }}</h4>
                       </v-card-title>
