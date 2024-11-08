@@ -267,75 +267,7 @@ export default {
             class="h-screen overflow-auto"
           >
             <v-list nav>
-              <v-dialog v-model="addDialog" max-width="600" persistent>
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-list-item prepend-icon="mdi-plus" title="Add Note" value="add" v-bind="activatorProps"></v-list-item>
-                </template>
-                <v-card prepend-icon="mdi-note-plus" title="New Note">
-                  <v-form ref="form">
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="12">
-                          <v-text-field
-                            v-model="noteTitle"
-                            label="Title"
-                            :rules="noteTitleRules"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                          <v-textarea
-                            v-model="noteContent"
-                            placeholder="Add your note..."
-                          ></v-textarea>
-                        </v-col>
-                        <v-col :cols="12" :sm="6">
-                          <v-select
-                            v-model="noteTags"
-                            label="Tags"
-                            :items="tagItems"
-                            item-title="text"
-                            item-value="value"
-                            multiple
-                            chips
-                            closable-chips
-                          ></v-select>
-                        </v-col>
-                        <v-col :cols="12" :sm="6">
-                          <v-date-input
-                            v-model="noteDueDate"
-                            label="Select due date"
-                            prepend-icon=""
-                            prepend-inner-icon="$calendar"
-                          ></v-date-input>
-                        </v-col>
-                        <!-- <v-col :cols="12" :sm="4">
-                          <v-checkbox
-                            v-model="noteCompleted"
-                            :label="`${noteCompleted ? 'Completed' : 'Not Completed'}`"
-                          ></v-checkbox>
-                        </v-col> -->
-                      </v-row>
-                    </v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        text="Close"
-                        variant="plain"
-                        @click="reset"
-                      />
-                      <v-btn
-                        color="primary"
-                        text="Save"
-                        variant="tonal"
-                        @click="validate"
-                      />
-                    </v-card-actions>
-                  </v-form>
-                </v-card>
-              </v-dialog>
-
+              <v-list-item prepend-icon="mdi-plus" title="Add Note" value="add" @click="addDialog = true"></v-list-item>
               <v-list-item
                 prepend-icon="mdi-note-multiple-outline"
                 title="All Notes"
@@ -407,6 +339,72 @@ export default {
               </template>
             </v-data-iterator>
           </v-main>
+
+          <v-dialog v-model="addDialog" max-width="600" persistent>
+            <v-card prepend-icon="mdi-note-plus" title="New Note">
+              <v-form ref="form">
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="noteTitle"
+                        label="Title"
+                        :rules="noteTitleRules"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        v-model="noteContent"
+                        placeholder="Add your note..."
+                      ></v-textarea>
+                    </v-col>
+                    <v-col :cols="12" :sm="6">
+                      <v-select
+                        v-model="noteTags"
+                        label="Tags"
+                        :items="tagItems"
+                        item-title="text"
+                        item-value="value"
+                        multiple
+                        chips
+                        closable-chips
+                      ></v-select>
+                    </v-col>
+                    <v-col :cols="12" :sm="6">
+                      <v-date-input
+                        v-model="noteDueDate"
+                        label="Select due date"
+                        prepend-icon=""
+                        prepend-inner-icon="$calendar"
+                      ></v-date-input>
+                    </v-col>
+                    <!-- <v-col :cols="12" :sm="4">
+                      <v-checkbox
+                        v-model="noteCompleted"
+                        :label="`${noteCompleted ? 'Completed' : 'Not Completed'}`"
+                      ></v-checkbox>
+                    </v-col> -->
+                  </v-row>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    text="Close"
+                    variant="plain"
+                    @click="reset"
+                  />
+                  <v-btn
+                    color="primary"
+                    text="Save"
+                    variant="tonal"
+                    @click="validate"
+                  />
+                </v-card-actions>
+              </v-form>
+            </v-card>
+          </v-dialog>
 
           <v-dialog v-model="editDialog" max-width="600" persistent>
             <v-card prepend-icon="mdi-square-edit-outline" title="Edit Note">
