@@ -220,8 +220,7 @@ export default {
             <template v-else>
               <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
             </template>
-            <v-toolbar-title>To-Do App</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-toolbar-title text="To-Do App" />
             <template v-if="windowWidth > 545">
               <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
@@ -273,26 +272,24 @@ export default {
             class="h-screen overflow-auto"
           >
             <v-list nav>
-              <v-list-item prepend-icon="mdi-plus" title="Add Note" value="add" @click="addDialog = true"></v-list-item>
+              <v-list-item prepend-icon="mdi-plus" title="Add Note" value="add" @click="addDialog = true" />
               <v-list-item
                 prepend-icon="mdi-note-multiple-outline"
                 title="All Notes"
                 value="notes"
                 @click="applyFilter('All', 'tag')"
               />
-              <v-list-subheader>Tags</v-list-subheader>
-              <v-list-item prepend-icon="mdi-tag-plus" title="Add Tag" value="addTag" @click="addTagDialog = true"></v-list-item>
+              <v-list-subheader title="Tags" />
+              <v-list-item prepend-icon="mdi-tag-plus" title="Add Tag" value="addTag" @click="addTagDialog = true" />
               <v-list-item
                 v-for="(item, i) in tagItems"
                 :key="i"
                 @click="applyFilter(item.text, 'tag')"
+                :prepend-icon="item.icon"
+                :title="item.text"
+                :value="item.value"
                 variant="plain"
-              >
-                <template v-slot:prepend>
-                  <v-icon :icon="item.icon"></v-icon>
-                </template>
-                <v-list-item-title v-text="item.text"></v-list-item-title>
-              </v-list-item>
+              />
             </v-list>
           </v-navigation-drawer>
 
@@ -311,19 +308,13 @@ export default {
                             {{ item.raw.content?.length > 200 ? item.raw.content.slice(0, 200) + '...' : item.raw.content }}
                           </v-col>
                           <v-col cols="12">
-                            <v-chip v-for="(tag, i) in item.raw.tags" :key="i" :value="tag">
-                              {{ tag }}
-                            </v-chip>
+                            <v-chip v-for="(tag, i) in item.raw.tags" :key="i" :text="tag" />
                           </v-col>
                         </v-row>
                         <v-row justify="end">
                           <v-col cols="auto">
-                            <v-chip v-if="item.raw.completed" label color="green" prepend-icon="mdi-check-circle">
-                              Completed
-                            </v-chip>
-                            <v-chip v-else label prepend-icon="mdi-clock-outline">
-                              Not Completed
-                            </v-chip>
+                            <v-chip v-if="item.raw.completed" label prepend-icon="mdi-check-circle" text="Completed" color="green" />
+                            <v-chip v-else label prepend-icon="mdi-clock-outline" text="Not Completed" />
                           </v-col>
                         </v-row>
                         <v-divider class="my-2"></v-divider>
@@ -357,13 +348,13 @@ export default {
                         label="Title"
                         :rules="noteTitleRules"
                         required
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
                         v-model="noteContent"
                         placeholder="Add your note..."
-                      ></v-textarea>
+                      />
                     </v-col>
                     <v-col :cols="12" :sm="6">
                       <v-select
@@ -375,7 +366,7 @@ export default {
                         multiple
                         chips
                         closable-chips
-                      ></v-select>
+                      />
                     </v-col>
                     <v-col :cols="12" :sm="6">
                       <v-date-input
@@ -383,13 +374,13 @@ export default {
                         label="Select due date"
                         prepend-icon=""
                         prepend-inner-icon="$calendar"
-                      ></v-date-input>
+                      />
                     </v-col>
                     <!-- <v-col :cols="12" :sm="4">
                       <v-checkbox
                         v-model="noteCompleted"
                         :label="`${noteCompleted ? 'Completed' : 'Not Completed'}`"
-                      ></v-checkbox>
+                      />
                     </v-col> -->
                   </v-row>
                 </v-card-text>
@@ -423,13 +414,13 @@ export default {
                         label="Title"
                         :rules="noteTitleRules"
                         required
-                      ></v-text-field>
+                      />
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
                         v-model="noteContent"
                         placeholder="Add your note..."
-                      ></v-textarea>
+                      />
                     </v-col>
                     <v-col :cols="12" :sm="6">
                       <v-select
@@ -441,7 +432,7 @@ export default {
                         multiple
                         chips
                         closable-chips
-                      ></v-select>
+                      />
                     </v-col>
                     <v-col :cols="12" :sm="6">
                       <v-date-input
@@ -449,7 +440,7 @@ export default {
                         label="Select due date"
                         prepend-icon=""
                         prepend-inner-icon="$calendar"
-                      ></v-date-input>
+                      />
                     </v-col>
                   </v-row>
                   <v-row justify="end">
@@ -457,7 +448,7 @@ export default {
                       <v-checkbox
                         v-model="noteCompleted"
                         :label="`${noteCompleted ? 'Completed' : 'Not Completed'}`"
-                      ></v-checkbox>
+                      />
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -481,15 +472,14 @@ export default {
           </v-dialog>
 
           <v-dialog v-model="deleteDialog" max-width="400">
-            <v-card>
-              <v-card-title class="text-h5">Confirm Delete</v-card-title>
+            <v-card prepend-icon="mdi-delete" title="Confirm Delete">
               <v-card-text>
                 Are you sure you want to delete this note?
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="grey" text @click="deleteDialog = false">Cancel</v-btn>
-                <v-btn color="red" text @click="deleteNote">Delete</v-btn>
+                <v-btn color="grey" text="Cancel" @click="deleteDialog = false" />
+                <v-btn color="red" text="Delete" @click="deleteNote" />
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -503,7 +493,7 @@ export default {
                     label="Tag"
                     :rules="tagInputRules"
                     required
-                  ></v-text-field>
+                  />
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
