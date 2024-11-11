@@ -15,6 +15,7 @@ export default {
     addDialog: false,
     editDialog: false,
     addTagDialog: false,
+    filterMenuVisible: false,
     notes: [],
     tagItems: [],
     noteTitle: "",
@@ -222,9 +223,9 @@ export default {
             </template>
             <v-toolbar-title text="To-Do App" />
             <template v-if="windowWidth > 545">
-              <v-menu open-on-hover>
+              <v-menu v-model="filterMenuVisible" open-on-hover>
                 <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" variant="tonal" prepend-icon="mdi-filter" class="mr-5">
+                  <v-btn v-bind="props" @click="filterMenuVisible = !filterMenuVisible" variant="tonal" prepend-icon="mdi-filter" class="mr-5">
                     {{ selectedFilter }}
                   </v-btn>
                 </template>
@@ -244,9 +245,9 @@ export default {
               />
             </template>
             <template v-else>
-              <v-menu open-on-hover>
+              <v-menu v-model="filterMenuVisible" open-on-hover>
                 <template v-slot:activator="{ props }">
-                  <v-btn v-bind="props" icon="mdi-filter" />
+                  <v-btn v-bind="props" @click="filterMenuVisible = !filterMenuVisible" icon="mdi-filter" />
                 </template>
                 <v-list>
                   <v-list-item title="All" @click="applyFilter('All', 'completed')" />
