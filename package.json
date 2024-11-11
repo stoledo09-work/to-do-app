@@ -5,12 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "build-prod": "cross-env VUE_APP_ENV='production' vue-cli-service build",
+    "deploy-prod-hosting": "yarn build-prod && firebase use default && firebase deploy --only hosting"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.13",
+    "firebase": "^11.0.1",
+    "firebase-tools": "^13.24.2",
     "roboto-fontface": "*",
     "vee-validate": "^4.14.6",
     "vue": "^3.2.13",
