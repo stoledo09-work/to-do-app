@@ -2,6 +2,10 @@
 
 M-etrica, prueba técnica
 
+# Firebase Hosting
+
+https://m-etrica-to-do-app.web.app/
+
 ## Project setup
 
 ```
